@@ -1,14 +1,29 @@
 {
-	"extends": "./.svelte-kit/tsconfig.json",
-	"compilerOptions": {
-		"allowJs": true,
-		"checkJs": true,
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"resolveJsonModule": true,
-		"skipLibCheck": true,
-		"sourceMap": true,
-		"strict": true,
-		"moduleResolution": "NodeNext"
-	}
-}
+    "extends": "./.svelte-kit/tsconfig.json",
+    "compilerOptions": {
+      "module": "esnext",
+      "target": "esnext",
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "moduleResolution": "node",
+      "resolveJsonModule": true,
+      "strict": true,
+      "noUnusedParameters": true,
+      "noUnusedLocals": true,
+      "noImplicitReturns": true,
+      "noFallthroughCasesInSwitch": true,
+      "noUncheckedIndexedAccess": true,
+      "noPropertyAccessFromIndexSignature": true,
+      "noImplicitOverride": true,
+      "exactOptionalPropertyTypes": true,
+      "baseUrl": ".",
+      "types": ["cypress"]
+    },
+    "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.svelte", "cypress"]
+  }
+  
+  
+  
+  
+  
+  
