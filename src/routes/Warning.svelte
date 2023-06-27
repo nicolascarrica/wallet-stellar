@@ -1,15 +1,18 @@
 <script>
   import Alert from '../elements/Alert.svelte';
-  import Button from '../elements/Button.svelte';
-  import { showAccount, signIn } from '../elements/store';
-  import { keyPair } from '../elements/store'
-
-  let publicKey = '';
+  import { showAccount, signIn } from '../utils/store';
+  import { keyPair } from '../utils/store'
+  import { handleCopyKey, showCopiedMessage } from '../utils/copy';
+  import {addFunds} from '../stellar-fuctions/addFunds';
+  import { toasts, ToastContainer, FlatToast } from 'svelte-toasts';
+	import { hash } from 'stellar-sdk';
+  
   let secretKey = '';
+  let publicKey = '';
 
   keyPair.subscribe(value => {
-    publicKey = value.publicKey;
     secretKey = value.secretKey;
+    publicKey = value.publicKey;
   });	
 
   function handleGoBack() {
@@ -17,74 +20,65 @@
     keyPair.set({ publicKey: '', secretKey: '' })
   }
 
-  function handleGoNext() {
-    signIn.set(false);
+  function showToast(type, message) {
+    toasts.add({
+      title: type === 'success' ? 'Success' : 'Error',
+      description: message,
+      duration: 3000,
+      placement: 'bottom-right',
+      type: type,
+      theme: 'dark',
+    });
+  };
+  
+  async function handleGoNext() {
+    try {
+      await addFunds(publicKey);
+      showToast('success', 'Funds added successfully!');
+      signIn.set(false); 
+    } catch (error) {
+      showToast('error', 'Failed to add funds in Stellar account');
+      signIn.set(true);
+    }
   }
+  
+  console.log(addFunds)
 
-  function handleCopySecretKey() {
-    navigator.clipboard.writeText(secretKey)
-      .then(() => {
-        // Se ha copiado correctamente
-        showCopiedMessage();
-      })
-      .catch(err => {
-        console.error('Error al copiar al portapapeles:', err);
-      });
+  function handleCopyPrivateKey() {
+    handleCopyKey(secretKey, { set: setShowCopied });
   }
 
   let showCopied = false;
-
-  function showCopiedMessage() {
-    showCopied = true;
-    setTimeout(() => {
-      showCopied = false;
-    }, 2000);
+  function setShowCopied(value) {
+    showCopied = value;
   }
-
-  
-
 </script>
+
 
 <main>
   
   <Alert type="warning" message="Warning: Make sure to securely store your secret key" />
-  <div class="input-container">
-    <input class="input-style" value={publicKey} />
-    <input class="input-style" value={secretKey} />
-    <Button textButton="Copy Secret Key" color="#008d23" onclick={handleCopySecretKey} />
+  
+  <div class="input-group mb-3">
+    <input class="form-control" value={secretKey} />
+    <button class="btn btn-secondary me-2" on:click={handleCopyPrivateKey}>
+      {#if showCopied}
+        Copied
+      {:else}
+        Copy
+      {/if}
+    </button>
+  </div>
+  <ToastContainer let:data={data}>
+		<FlatToast {data}  />
+	</ToastContainer>
+	
+  <div class="d-flex justify-content-between">
+    <button class="btn btn-primary" on:click={handleGoBack}>Go Back</button>
+    <button class="btn btn-success" on:click={handleGoNext}>Go Next</button>
   </div>
 
-  {#if showCopied}
-    <div class="copy-message">Secret key copied to clipboard!</div>
-  {/if}
-
-  <div class="button-container">
-    <Button textButton="Go Back" color="red" onclick={handleGoBack}/>
-    <Button textButton="Next" color="blue" onclick={handleGoNext}/>
-  </div>
+  
+  
   
 </main>
-
-<style>
-  .button-container {
-    display: flex;
-    justify-content: space-between;
-  
-  }
-
-  .input-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    font-size: 12px;
-  }
-
-  .input-style {
-    padding: 8px;
-    font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    outline: none;
-    width: 100%;
-  }
-</style>

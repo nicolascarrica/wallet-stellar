@@ -1,8 +1,8 @@
 <script>
-	import { keyPair, showAccount, signIn } from "../elements/store";
+	import { keyPair, showAccount, signIn } from "../utils/store";
 	import Main from "./Main.svelte";
-	import Setup from "../components/Setup.svelte";
-	import Warning from "../components/Warning.svelte";
+	import Setup from "./Setup.svelte";
+	import Warning from "./Warning.svelte";
 
 </script>
 
