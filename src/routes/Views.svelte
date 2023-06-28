@@ -24,7 +24,8 @@
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: center;
-	height: 500vh;
+	
 	margin-top: 40px; 
 	}
+
 </style>
