@@ -1,30 +1,24 @@
-import StellarSdk from "stellar-sdk";
-
-type CustomBalance = {
-  asset_type: string;
-  balance: string;
-};
+import StellarSdk from 'stellar-sdk';
 
 const server = new StellarSdk.Server("https://horizon-testnet.stellar.org");
 
 export const getAccountBalances = async (publicKey: string) => {
-  const pair = StellarSdk.Keypair.fromPublicKey(publicKey);
-
   try {
-    const account = await server.loadAccount(pair.publicKey());
-    console.log("Balances for account: " + pair.publicKey());
+    if (!publicKey) {
+      // Si la publicKey está vacía o no existe, retornar un arreglo vacío. Me daba error al hacer logOut
+      return [];
+    }
 
-    const balances: CustomBalance[] = [];
-
-    account.balances.forEach(function (balance: CustomBalance) {
-      console.log("Type:", balance.asset_type, ", Balance:", balance.balance);
-      balances.push(balance);
-    });
-   
-
+    const account = await server.loadAccount(publicKey);
+    console.log(account)
+    const balances = account.balances;
+    console.log(balances)
     return balances;
-  } catch (error) {
-    console.error("Error loading account:", error);
+    
+  } catch (e) {
     return [];
   }
 };
+
+
+
