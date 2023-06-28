@@ -2,13 +2,13 @@
   import { signIn, keyPair } from "../utils/store";
   import { handleCopyKey, showCopiedMessage } from '../utils/copy';
   import { getAccountBalances } from "../stellar-fuctions/getAccountBalances";
+  import { onMount } from 'svelte';
 
   let publicKey = '';
   let balances = [];
 
   keyPair.subscribe(value => {
     publicKey = value.publicKey;
-    getBalances();
   });
 
   let showCopied = false;
@@ -24,6 +24,10 @@
   async function getBalances() {
     balances = await getAccountBalances(publicKey);
   }
+
+  onMount(() => {
+    getBalances();
+  });
 
 </script>
 
