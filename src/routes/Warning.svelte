@@ -1,48 +1,42 @@
 <script>
   import Alert from '../elements/Alert.svelte';
-  import { showAccount, signIn } from '../utils/store';
-  import { keyPair } from '../utils/store'
+  import Toast from '../elements/Toast.svelte';
+  import { showAccount, signIn, funding } from '../utils/store';
+  import { keyPair } from '../utils/store';
   import { handleCopyKey, showCopiedMessage } from '../utils/copy';
-  import {addFunds} from '../stellar-fuctions/addFunds';
-  import { toasts, ToastContainer, FlatToast } from 'svelte-toasts';
-	import { hash } from 'stellar-sdk';
-  
+  import { addFunds } from '../stellar-fuctions/addFunds';
+
   let secretKey = '';
   let publicKey = '';
 
   keyPair.subscribe(value => {
-    secretKey = value.secretKey;
-    publicKey = value.publicKey;
-  });	
+    if (value) {
+      secretKey = value.secretKey;
+      publicKey = value.publicKey;
+    }
+  });
+
+  let showErrorToast = false;
+  let showSuccessToast = false;
 
   function handleGoBack() {
     signIn.set(false);
-    keyPair.set({ publicKey: '', secretKey: '' })
+    keyPair.set({ publicKey: '', secretKey: '' });
   }
 
-  function showToast(type, message) {
-    toasts.add({
-      title: type === 'success' ? 'Success' : 'Error',
-      description: message,
-      duration: 3000,
-      placement: 'bottom-right',
-      type: type,
-      theme: 'dark',
-    });
-  };
-  
   async function handleGoNext() {
     try {
+      funding.set(true);
       await addFunds(publicKey);
-      showToast('success', 'Funds added successfully!');
       signIn.set(false); 
     } catch (error) {
-      showToast('error', 'Failed to add funds in Stellar account');
+      showErrorToast = true;
       signIn.set(true);
+    } finally {
+      funding.set(false); 
     }
   }
   
-  console.log(addFunds)
 
   function handleCopyPrivateKey() {
     handleCopyKey(secretKey, { set: setShowCopied });
@@ -54,9 +48,7 @@
   }
 </script>
 
-
 <main>
-  
   <Alert type="warning" message="Warning: Make sure to securely store your secret key" />
   
   <div class="input-group mb-3">
@@ -69,16 +61,30 @@
       {/if}
     </button>
   </div>
-  <ToastContainer let:data={data}>
-		<FlatToast {data}  />
-	</ToastContainer>
-	
+  
+
+  {#if showErrorToast}
+    <Toast type="error" message="Failed to add funds in Stellar account" show={showErrorToast}/>
+  {/if}
+
+
+  {#if showSuccessToast}
+    <Toast type="success" message="Funds added successfully!" show={showSuccessToast} />
+  {/if}
+
+  {#if $funding === true}
+    <p class="text-center">Funding in progress...</p>
+  {/if}
+
   <div class="d-flex justify-content-between">
     <button class="btn btn-primary" on:click={handleGoBack}>Go Back</button>
     <button class="btn btn-success" on:click={handleGoNext}>Go Next</button>
   </div>
-
-  
-  
-  
 </main>
+
+<style>
+  .text-center {
+    text-align: center;
+    color:indigo
+  }
+</style>

@@ -1,5 +1,4 @@
 <script>
-  import {fade} from 'svelte/transition'
   import { createAccount } from '../stellar-fuctions/createAccount';
   import { importAccount }  from '../stellar-fuctions/importAccount';
   import { keyPair, showAccount, signIn } from '../utils/store';
@@ -43,8 +42,8 @@
   
   
 <main class="d-flex justify-content-center align-items-center">
-  <div out:fade class="setup text-center">
-    <h1 class="mb-4 text-truncate" style="max-width: 100%;">Welcome to your Stellar Wallet</h1>
+  <div class="setup text-center">
+    <h1 class="mb-2">Welcome to your Stellar Wallet</h1>
     <p>Is this your first time here? You'll need a KeyPair so we can get started</p>
     <button class="btn btn-primary" on:click={handleNewKeyPair}>Create Account</button>
     <p>If you already have an account, you can import it.</p>

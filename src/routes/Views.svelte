@@ -19,13 +19,19 @@
 </main>
 
 <style>
-	main {
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	align-items: center;
-	
-	margin-top: 40px; 
-	}
+
+main {
+  display: flex;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 500px; 
+  margin: 20px auto; 
+}
+
 
 </style>
