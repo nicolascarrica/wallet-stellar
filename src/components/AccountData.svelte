@@ -25,6 +25,15 @@
     balances = await getAccountBalances(publicKey);
   }
 
+  async function updateBalance(index) {
+    try {
+      balances[index].newBalance = 500;
+      await getBalances();
+    } catch (error) {
+      console.error('Failed to update balance:', error);
+    }
+  }
+
   onMount(() => {
     getBalances();
   });
@@ -37,8 +46,8 @@
     <p>Public Key</p>
   </div>
   <div class="public-key">
-    <div class="input-group mb-3">
-      <input class="form-control" value={publicKey} />
+    <div class="input-group mb-3" >
+      <input class="form-control" value={publicKey}  />
       <button class="btn btn-secondary" on:click={handleCopyPublicKey}>
         {#if showCopied}
           Copied
@@ -56,6 +65,7 @@
           <span class="input-group-text">Numero: {index + 1}</span>
           <input type="text" class="form-control" value={balance.balance} />
           <span class="input-group-text">$ {balance.asset_type}</span>
+          <button class="btn btn-secondary" on:click={() => updateBalance(index)}>Update</button>
         </div>
       {/each}
     </div>
