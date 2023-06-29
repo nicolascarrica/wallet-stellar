@@ -21,15 +21,19 @@
   } 
 
   let showError = false;
+
   function handleImportAccount() {
     if (inputValue.length === 56) {
       console.log('Valor ingresado:', inputValue);
-      const secretKey = importAccount(inputValue);
-      keyPair.set(secretKey);
-      signIn.set(true);
-
+      const keyPairResult = importAccount(inputValue);
+      if (keyPairResult !== null) {
+        keyPair.set(keyPairResult);
+        signIn.set(false);
+      } else {
+        console.log('Invalid private key');
+      }
     } else {
-      showError = true; 
+      showError = true;
 
       setTimeout(() => {
         showError = false;
