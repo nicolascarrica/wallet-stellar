@@ -55,7 +55,7 @@
       <div class="error-message">Invalid number of characters</div>
     {/if}
     <div class="mb-2">
-      <input class="form-control" placeholder="Enter your private key" value={inputValue} on:input={handleInputChange} />
+      <input type="text" class="form-control" placeholder="Enter your private key" value={inputValue} on:input={handleInputChange} />
     </div>
     <button class="btn btn-success" on:click={handleImportAccount}>Import Account</button>
   </div>
