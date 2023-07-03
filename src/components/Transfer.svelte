@@ -53,7 +53,7 @@
   
   <div class="balance-account">
     <div class="input-group mb-3">
-      <input type="number" class="form-control" placeholder="Ammount" step="0.01" bind:value={amount} on:input={handleAmountInput} />
+      <input type="number" class="form-control" placeholder="Amount" step="0.01" bind:value={amount} on:input={handleAmountInput} />
       <span class="input-group-text">XLM</span>
     </div>
   </div>
@@ -64,15 +64,20 @@
 
    
   {#if showErrorToast}
-   <Toast type="error" message="Error sending, please verify the entered data." show={showErrorToast}/>
+  <div class="error-toast">
+    <Toast type="error" message="Error sending, please verify the entered data." show={showErrorToast} />
+  </div>
+   
   {/if}
 
  
  {#if showSuccessToast}
-   <Toast type="success" message={`You successfully sent ${amount} XLM to ${destinationId}`} show={showSuccessToast} />
- {/if}
+  <div class="success-toast">
+    <Toast type="success" message={`You successfully sent ${amount} XLM to ${destinationId}`} show={showSuccessToast} />
+  </div>
+  {/if}
   
-  <div>
+  <div class="success-toast" >
     <button class="btn btn-success mb-3" on:click={sendXLM}>Send</button>
   </div>
 </main>
