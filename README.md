@@ -1,58 +1,54 @@
-# create-svelte
+# wallet-stellar 🪐
 
-Everything you need to build a Svelte library, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+A simple crypto wallet built on the **Stellar** blockchain (testnet), made with **SvelteKit** and **TypeScript**.
 
-Read more about creating a library [in the docs](https://kit.svelte.dev/docs/packaging).
+It lets you create or import a Stellar account, fund it with test XLM, check your balance, and send payments — all from a small, self-contained web app.
 
-## Creating a project
+## ✨ Features
 
-If you're seeing this, you've probably already done this step. Congrats!
+- 🔑 **Create a new account** — generates a fresh Stellar keypair (public/secret key).
+- 📥 **Import an existing account** — sign in with an existing secret key.
+- 💧 **Fund with test XLM** — tops up the account via Stellar's [Friendbot](https://developers.stellar.org/docs/learn/fundamentals/networks#friendbot) (testnet faucet).
+- 💰 **Check balances** — reads live balances from the Stellar Horizon testnet server.
+- 💸 **Send payments** — builds, signs, and submits native XLM payment transactions.
+- 🔔 Toast notifications and basic input validation for a smoother UX.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## 🛠️ Tech Stack
 
-# create a new project in my-app
-npm create svelte@latest my-app
+- [SvelteKit](https://kit.svelte.dev/) + TypeScript
+- [stellar-sdk](https://www.npmjs.com/package/stellar-sdk) — account, transaction, and Horizon server handling
+- Bootstrap 5 — UI styling
+- svelte-routing — client-side routing
+- svelte-toasts — notifications
+- Vite / Vitest — build tooling and unit tests
+
+## 📁 Project Structure
+
+```
+src/
+├── routes/              # App views (Setup, Main, Warning) and view routing
+├── components/          # AccountData, Transfer
+├── elements/             # Alert, Toast
+├── stellar-fuctions/     # Stellar SDK calls: createAccount, importAccount,
+│                          # addFunds, getAccountBalances, sendPayment
+└── utils/                # Shared store (keypair/session state) and helpers
 ```
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## ▶️ Run locally
 
 ```bash
+git clone https://github.com/nicolascarrica/wallet-stellar
+cd wallet-stellar
+npm install
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
+Then open the local URL Vite prints in your terminal.
 
-## Building
+## ⚠️ Note
 
-To build your library:
+This project runs entirely against the **Stellar testnet** (Horizon testnet + Friendbot). It does not use mainnet and is not intended to hold real funds — it was built as a learning project to understand wallet flows, key management, and blockchain transactions.
 
-```bash
-npm run package
-```
+## 📌 Status
 
-To create a production version of your showcase app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
-
-## Publishing
-
-Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
-
-To publish your library to [npm](https://www.npmjs.com):
-
-```bash
-npm publish
-```
+Personal project, built to practice integrating a blockchain SDK into a front-end app end-to-end (account creation, signing, and submitting transactions).
